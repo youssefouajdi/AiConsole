@@ -1,6 +1,6 @@
 package projetAI;
 
-public class bloc {
+public class Bloc {
     public static final int NonPresent = 0;
     public static final int PasSur = 1;
     public static final int Fleche = 1;

@@ -5,23 +5,25 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Scanner;
 
-class test/*implements KeyListener, ActionListener*/{
-	static bloc[][] mat;
+class Test/*implements KeyListener, ActionListener*/{
+	static Bloc[][] mat;
 	static int n;
+	static Direction direction = Direction.EST;
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("entrez la taille de la matrice: ");
 		n = sc.nextInt();
-		mat = new bloc[n][n];
+		mat = new Bloc[n][n];
 		for(int i=0; i<n; i++) {
-			mat[i] = new bloc[n];
+			mat[i] = new Bloc[n];
 			for(int j=0; j<n; j++)
-				mat[i][j] = new bloc();
+				mat[i][j] = new Bloc();
 		}
+
 		int pits;
 		do {
-			System.out.print("\n entrez le nombre de puit: ");
+			System.out.print("\n entrez le nombre de puits: ");
 			pits = sc.nextInt();
 		}while(pits>n);
 		for(int i=0; i<pits; i++) {
@@ -33,8 +35,8 @@ class test/*implements KeyListener, ActionListener*/{
 		System.out.print("\n entrez la position de l or: ");
 		AjouOr(n-sc.nextInt(), sc.nextInt()-1);
 		System.out.print("\nVotre emplacement actuel est : [1] [1]");
-		int r = n - 1;
-		int c = 1- 1;
+		int r = n - 1;/*n=r+1*/
+		int c = 0;
 		int rPrev = -1, cPrev = -1;
 		int Deplacements = 0;
 		System.out.println("\n voulez vous jouer:");
@@ -64,17 +66,45 @@ class test/*implements KeyListener, ActionListener*/{
 					System.out.println("je ressens rien");
 					System.out.println("vous pouvez continuer");
 					System.out.println("veuillez choisir ou vous voulez vous deplacer");
-					
+
 					if(sc.next().charAt(0)=='d') {
+						switch(direction) {
+						case EST:
+							direction = Direction.SUD;
+							break;
+						case OUEST:
+							direction = Direction.NORD;
+							break;
+						case NORD:
+							direction = Direction.EST;
+							break;
+						case SUD:
+							direction = Direction.OUEST;
+							break;
+						}
 						System.out.println("vous avez choisi de tourner a droite");
 					}
 					if(sc.next().charAt(0)=='g') {
+						switch(direction) {
+						case EST:
+							direction = Direction.NORD;
+							break;
+						case OUEST:
+							direction = Direction.SUD;
+							break;
+						case NORD:
+							direction = Direction.OUEST;
+							break;
+						case SUD:
+							direction = Direction.EST;
+							break;
+						}
 						System.out.println("vous avez choisi de tourner a gauche");
 					}
-					
+
 				}
-				
-				
+
+
 				if(Deplacements > n*n) {
 					System.out.println("\nPas de solution!");
 					int score=-Deplacements;
@@ -94,7 +124,7 @@ class test/*implements KeyListener, ActionListener*/{
 
 				sc.close();
 			}
-			
+
 		}
 		else {
 			System.out.println("\netat initial:");
@@ -102,55 +132,55 @@ class test/*implements KeyListener, ActionListener*/{
 
 			while(!mat[r][c].AOr) {
 				mat[r][c].Visite = true;
-				mat[r][c].StatutPuit = bloc.NonPresent;
-				mat[r][c].StatutWampus = bloc.NonPresent;
+				mat[r][c].StatutPuit = Bloc.NonPresent;
+				mat[r][c].StatutWampus = Bloc.NonPresent;
 
 				if(!mat[r][c].AFroid) {
-					if(r >= 1 && mat[r-1][c].StatutPuit == bloc.PasSur)
-						mat[r-1][c].StatutPuit = bloc.NonPresent;
-					if(r <= (n-2) && mat[r+1][c].StatutPuit == bloc.PasSur)
-						mat[r+1][c].StatutPuit = bloc.NonPresent;
-					if(c >= 1 && mat[r][c-1].StatutPuit == bloc.PasSur)
-						mat[r][c-1].StatutPuit = bloc.NonPresent;
-					if(c <= (n-2) && mat[r][c+1].StatutPuit == bloc.PasSur)
-						mat[r][c+1].StatutPuit = bloc.NonPresent;
+					if(r >= 1 && mat[r-1][c].StatutPuit == Bloc.PasSur)
+						mat[r-1][c].StatutPuit = Bloc.NonPresent;
+					if(r <= (n-2) && mat[r+1][c].StatutPuit == Bloc.PasSur)
+						mat[r+1][c].StatutPuit = Bloc.NonPresent;
+					if(c >= 1 && mat[r][c-1].StatutPuit == Bloc.PasSur)
+						mat[r][c-1].StatutPuit = Bloc.NonPresent;
+					if(c <= (n-2) && mat[r][c+1].StatutPuit == Bloc.PasSur)
+						mat[r][c+1].StatutPuit = Bloc.NonPresent;
 				}
 
 				if(!mat[r][c].APuanteur) {
-					if(r >= 1 && mat[r-1][c].StatutWampus == bloc.PasSur)
-						mat[r-1][c].StatutWampus = bloc.NonPresent;
-					if(r <= (n-2) && mat[r+1][c].StatutWampus == bloc.PasSur)
-						mat[r+1][c].StatutWampus = bloc.NonPresent;
-					if(c >= 1 && mat[r][c-1].StatutWampus == bloc.PasSur)
-						mat[r][c-1].StatutWampus = bloc.NonPresent;
-					if(c <= (n-2) && mat[r][c+1].StatutWampus == bloc.PasSur)
-						mat[r][c+1].StatutWampus = bloc.NonPresent;
+					if(r >= 1 && mat[r-1][c].StatutWampus == Bloc.PasSur)
+						mat[r-1][c].StatutWampus = Bloc.NonPresent;
+					if(r <= (n-2) && mat[r+1][c].StatutWampus == Bloc.PasSur)
+						mat[r+1][c].StatutWampus = Bloc.NonPresent;
+					if(c >= 1 && mat[r][c-1].StatutWampus == Bloc.PasSur)
+						mat[r][c-1].StatutWampus = Bloc.NonPresent;
+					if(c <= (n-2) && mat[r][c+1].StatutWampus == Bloc.PasSur)
+						mat[r][c+1].StatutWampus = Bloc.NonPresent;
 				}
 
 				boolean NouvChemain = false;
 
-				if(r >= 1 && !((r-1) == rPrev && c == cPrev) && mat[r-1][c].Visite == false && mat[r-1][c].StatutPuit == bloc.NonPresent && mat[r-1][c].StatutWampus == bloc.NonPresent) {
+				if(r >= 1 && !((r-1) == rPrev && c == cPrev) && mat[r-1][c].Visite == false && mat[r-1][c].StatutPuit == Bloc.NonPresent && mat[r-1][c].StatutWampus == Bloc.NonPresent) {
 					rPrev = r;
 					cPrev = c;
-					r--;
+					r--; //go up
 					NouvChemain = true;
 				}
-				else if(r <= (n-2) && !((r+1) == rPrev && c == cPrev) && mat[r+1][c].Visite == false && mat[r+1][c].StatutPuit == bloc.NonPresent && mat[r+1][c].StatutWampus == bloc.NonPresent) {
+				else if(r <= (n-2) && !((r+1) == rPrev && c == cPrev) && mat[r+1][c].Visite == false && mat[r+1][c].StatutPuit == Bloc.NonPresent && mat[r+1][c].StatutWampus == Bloc.NonPresent) {
 					rPrev = r;
 					cPrev = c;
-					r++;
+					r++; //go down
 					NouvChemain = true;
 				}
-				else if(c >= 1 && !(r == rPrev && (c-1) == cPrev) && mat[r][c-1].Visite == false && mat[r][c-1].StatutPuit == bloc.NonPresent && mat[r][c-1].StatutWampus == bloc.NonPresent) {
+				else if(c >= 1 && !(r == rPrev && (c-1) == cPrev) && mat[r][c-1].Visite == false && mat[r][c-1].StatutPuit == Bloc.NonPresent && mat[r][c-1].StatutWampus == Bloc.NonPresent) {
 					rPrev = r;
 					cPrev = c;
-					c--;
+					c--; //go left
 					NouvChemain = true;
 				}
-				else if(c <= (n-2) && !(r == rPrev && (c+1) == cPrev) && mat[r][c+1].Visite == false && mat[r][c+1].StatutPuit == bloc.NonPresent && mat[r][c+1].StatutWampus == bloc.NonPresent) {
+				else if(c <= (n-2) && !(r == rPrev && (c+1) == cPrev) && mat[r][c+1].Visite == false && mat[r][c+1].StatutPuit == Bloc.NonPresent && mat[r][c+1].StatutWampus == Bloc.NonPresent) {
 					rPrev = r;
 					cPrev = c;
-					c++;
+					c++; //go right
 					NouvChemain = true;
 				}
 
@@ -252,8 +282,24 @@ class test/*implements KeyListener, ActionListener*/{
 		for(int i=0; i<n; i++) {
 			for(int j=0; j<n; j++) {
 				char charToPrint = '-';
-				if(r == i && c == j)
-					charToPrint = '*';
+				if(r == i && c == j) {
+					switch(direction) {
+					case EST:
+						charToPrint = '>';
+						break;
+					case OUEST:
+						charToPrint = '<';
+						break;
+					case NORD:
+						charToPrint = '^';
+						break;
+					case SUD:
+						charToPrint = 'v';
+						break;
+					}
+
+				}
+
 				else if(mat[i][j].APuit)
 					charToPrint = 'O';
 				else if(mat[i][j].AWumpus)
